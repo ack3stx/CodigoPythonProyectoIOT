@@ -1,6 +1,7 @@
 from Padre import Padre
 from bson import json_util
 import time
+from pymongo import MongoClient 
 
 class Monitor(Padre):
     def __init__(self):
@@ -8,6 +9,14 @@ class Monitor(Padre):
         self.lista = False
         self.lista_objetos = []
         self.id = None   
+
+
+
+    def conexion_Mongo(self, Coleccion):
+        client = MongoClient('mongodb+srv://myAtlasDBUser:6FHvrSmI8v3kLsO0@myatlasclusteredu.c5nk4.mongodb.net/')
+        db = client["iot"]
+        coleccion = db[Coleccion]
+        return coleccion
 
     def observar_cambios(self):
         while True: 
@@ -35,22 +44,20 @@ class Monitor(Padre):
                         self.obtenerultimodato_Monitor()
                     except Exception as e:
                         print(f"Error durante la observación: {e}")
-                        # Si hay error durante la observación, salir del bucle interno
-                        # para verificar conexión nuevamente
+
                         break
                         
             except KeyboardInterrupt:
                 print("\nObservación de cambios interrumpida por el usuario")
                 if 'change_stream' in locals():
                     change_stream.close()
-                return  # Salir completamente
+                return 
                 
             except Exception as e:
                 print(f"Error de conexión: {e}")
                 print("Intentando reconectar en 10 segundos...")
                 time.sleep(10)
                 
-            # Si llegamos aquí, el bucle interno se rompió, intentamos reconectar
             if 'change_stream' in locals():
                 try:
                     change_stream.close()
@@ -137,7 +144,7 @@ class Monitor(Padre):
         Obtiene el último registro y lo guarda en ultimodato.json
         """
         registros = self.obtener_Ultimo()
-        if registros:  # Verificar si hay registros
+        if registros: 
             datos = []
             for registro in registros:
                 datos.append(json_util.loads(json_util.dumps(registro)))

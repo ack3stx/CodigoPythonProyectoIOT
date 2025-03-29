@@ -98,6 +98,7 @@ class Monitor(Padre):
             {
                 "$project": {
                     "_id": 0,
+                    "user_id": 1,
                     "id_monitor": 1,
                     "sensor": 1,
                     "Fecha": 1,
@@ -128,6 +129,7 @@ class Monitor(Padre):
             {
                 "$project": {
                     "_id": 0,
+                    "user_id": 1,
                     "id_monitor": 1,
                     "sensor": 1,
                     "Fecha": 1,

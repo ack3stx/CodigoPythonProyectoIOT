@@ -24,7 +24,7 @@ class Padre:
             json.dump(data, file, indent=4, default=json_util.default)
 
     
-    def conexion_Mongo(self, Coleccion):  # Nombre corregido
+    def conexion_Mongo(self, Coleccion):
         client = MongoClient('mongodb+srv://myAtlasDBUser:6FHvrSmI8v3kLsO0@myatlasclusteredu.c5nk4.mongodb.net/')
         db = client["iot"]
         coleccion = db[Coleccion]
